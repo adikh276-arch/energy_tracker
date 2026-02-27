@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useEnergy, EnergyLevel } from "@/context/EnergyContext";
+import { Home } from "lucide-react";
 import TopBar from "@/components/TopBar";
 import {
   ResponsiveContainer,
