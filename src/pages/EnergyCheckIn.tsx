@@ -38,10 +38,10 @@ const EnergyCheckIn = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setCurrentLevel(opt.level)}
-                className={`flex flex-col items-center gap-2 rounded-2xl p-3 transition-all ${
+                className={`flex flex-col items-center gap-2 rounded-2xl border p-3 transition-all ${
                   isSelected
-                    ? "energy-glow scale-110 bg-surface-glow"
-                    : "bg-card hover:bg-secondary"
+                    ? "energy-glow scale-110 border-primary/30 bg-surface-glow"
+                    : "border-border bg-card hover:border-primary/20 hover:bg-secondary"
                 }`}
               >
                 <span className="text-4xl">{opt.emoji}</span>
