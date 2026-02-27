@@ -38,6 +38,7 @@ const getLineColor = (value: number) => {
 
 const WeeklyOverview = () => {
   const { entries } = useEnergy();
+  const navigate = useNavigate();
 
   const today = new Date();
   const days = Array.from({ length: 7 }, (_, i) => {
