@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useEnergy, EnergyLevel } from "@/context/EnergyContext";
+import { Home } from "lucide-react";
 import TopBar from "@/components/TopBar";
 import {
   ResponsiveContainer,
@@ -36,6 +38,7 @@ const getLineColor = (value: number) => {
 
 const WeeklyOverview = () => {
   const { entries } = useEnergy();
+  const navigate = useNavigate();
 
   const today = new Date();
   const days = Array.from({ length: 7 }, (_, i) => {
@@ -155,6 +158,16 @@ const WeeklyOverview = () => {
           </motion.div>
         )}
       </main>
+
+      <div className="sticky bottom-0 px-6 pb-8 pt-4">
+        <button
+          onClick={() => navigate("/")}
+          className="flex w-full items-center justify-center gap-2 rounded-pill bg-secondary py-4 text-base font-bold text-secondary-foreground transition-all hover:bg-muted"
+        >
+          <Home className="h-5 w-5" />
+          Go Back to Home
+        </button>
+      </div>
     </div>
   );
 };
