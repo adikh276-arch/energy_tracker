@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEnergy, EnergyLevel } from "@/context/EnergyContext";
 import { Home } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import TopBar from "@/components/TopBar";
 import {
   ResponsiveContainer,
@@ -12,7 +13,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import { format, subDays, parseISO } from "date-fns";
+import { format, subDays } from "date-fns";
 
 const levelToNum: Record<EnergyLevel, number> = {
   "very-low": 1,
@@ -22,23 +23,18 @@ const levelToNum: Record<EnergyLevel, number> = {
   high: 5,
 };
 
-const numToLabel: Record<number, string> = {
-  1: "Very Low",
-  2: "Low",
-  3: "Okay",
-  4: "Good",
-  5: "High",
-};
-
-const getLineColor = (value: number) => {
-  if (value >= 4) return "hsl(145, 50%, 45%)";
-  if (value >= 3) return "hsl(45, 60%, 55%)";
-  return "hsl(0, 50%, 55%)";
-};
-
 const WeeklyOverview = () => {
   const { entries } = useEnergy();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const numToLabel: Record<number, string> = {
+    1: t("very_low"),
+    2: t("low"),
+    3: t("okay"),
+    4: t("good"),
+    5: t("high"),
+  };
 
   const today = new Date();
   const days = Array.from({ length: 7 }, (_, i) => {
@@ -61,7 +57,7 @@ const WeeklyOverview = () => {
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
-      <TopBar title="Weekly Energy" showBack />
+      <TopBar title={t("weekly_title")} showBack />
 
       <main className="flex flex-1 flex-col px-6 pt-4">
         <motion.h2
@@ -69,7 +65,7 @@ const WeeklyOverview = () => {
           animate={{ opacity: 1 }}
           className="mb-6 text-xl font-bold text-foreground"
         >
-          Your Weekly Energy
+          {t("your_weekly")}
         </motion.h2>
 
         <motion.div
@@ -79,7 +75,7 @@ const WeeklyOverview = () => {
         >
           {filledDays.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              No entries yet this week. Start tracking to see your graph!
+              {t("no_entries")}
             </p>
           ) : (
             <ResponsiveContainer width="100%" height={200}>
@@ -98,10 +94,10 @@ const WeeklyOverview = () => {
                   tick={{ fontSize: 10, fill: "hsl(200, 10%, 50%)" }}
                   axisLine={false}
                   tickLine={false}
-                  width={50}
+                  width={60}
                 />
                 <Tooltip
-                  formatter={(value: number) => [numToLabel[value], "Energy"]}
+                  formatter={(value: number) => [numToLabel[value], t("energy")]}
                   contentStyle={{
                     borderRadius: "12px",
                     border: "none",
@@ -130,14 +126,14 @@ const WeeklyOverview = () => {
             className="card-soft rounded-2xl bg-surface-warm p-5"
           >
             <h3 className="mb-2 text-sm font-bold text-accent-foreground">
-              Energy Insight
+              {t("insight")}
             </h3>
             <p className="text-sm leading-relaxed text-accent-foreground/80">
               {avgValue >= 4
-                ? "You've had a great week! Your energy has been consistently high."
+                ? t("insight_high")
                 : avgValue >= 3
-                ? "You tend to have higher energy on days you rest well."
-                : "This week was tough. Remember to prioritize rest and recovery."}
+                  ? t("insight_okay")
+                  : t("insight_low")}
             </p>
           </motion.div>
         )}
@@ -150,10 +146,10 @@ const WeeklyOverview = () => {
             className="card-soft rounded-2xl bg-surface-warm p-5"
           >
             <h3 className="mb-2 text-sm font-bold text-accent-foreground">
-              Energy Insight
+              {t("insight")}
             </h3>
             <p className="text-sm leading-relaxed text-accent-foreground/80">
-              Keep logging for a few more days to unlock personalized insights!
+              {t("insight_more_data")}
             </p>
           </motion.div>
         )}
@@ -165,7 +161,7 @@ const WeeklyOverview = () => {
           className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary py-4 text-base font-bold text-primary-foreground transition-all"
         >
           <Home className="h-5 w-5" />
-          Go Back to Home
+          {t("go_home")}
         </button>
       </div>
     </div>

@@ -2,23 +2,32 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEnergy } from "@/context/EnergyContext";
 import { Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import TopBar from "@/components/TopBar";
-
-const factors = [
-  "Sleep", "Work / Study", "Stress", "Exercise",
-  "Socializing", "Screen Time", "Health", "Rest",
-  "Mood", "Anxiety",
-];
 
 const EnergyFactors = () => {
   const { currentFactors, setCurrentFactors, currentNote, setCurrentNote, saveEntry } = useEnergy();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const toggleFactor = (f: string) => {
+  const factors = [
+    { id: "Sleep", label: t("sleep") },
+    { id: "Work / Study", label: t("work_study") },
+    { id: "Stress", label: t("stress") },
+    { id: "Exercise", label: t("exercise") },
+    { id: "Socializing", label: t("socializing") },
+    { id: "Screen Time", label: t("screen_time") },
+    { id: "Health", label: t("health") },
+    { id: "Rest", label: t("rest") },
+    { id: "Mood", label: t("mood") },
+    { id: "Anxiety", label: t("anxiety") },
+  ];
+
+  const toggleFactor = (fId: string) => {
     setCurrentFactors(
-      currentFactors.includes(f)
-        ? currentFactors.filter((x) => x !== f)
-        : [...currentFactors, f]
+      currentFactors.includes(fId)
+        ? currentFactors.filter((x) => x !== fId)
+        : [...currentFactors, fId]
     );
   };
 
@@ -29,32 +38,31 @@ const EnergyFactors = () => {
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
-      <TopBar title="Energy Factors" showBack />
+      <TopBar title={t("factors_title")} showBack />
 
       <main className="flex flex-1 flex-col px-6 pt-4">
         <h2 className="mb-1 text-xl font-bold text-foreground">
-          What affected your energy today?
+          {t("what_affected")}
         </h2>
-        <p className="mb-6 text-sm text-muted-foreground">Optional</p>
+        <p className="mb-6 text-sm text-muted-foreground">{t("optional")}</p>
 
         <div className="mb-6 grid grid-cols-2 gap-3">
           {factors.map((f, i) => {
-            const selected = currentFactors.includes(f);
+            const selected = currentFactors.includes(f.id);
             return (
               <motion.button
-                key={f}
+                key={f.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.03 }}
-                onClick={() => toggleFactor(f)}
-                className={`flex items-center gap-2 rounded-pill px-4 py-3 text-sm font-semibold transition-all ${
-                  selected
+                onClick={() => toggleFactor(f.id)}
+                className={`flex items-center gap-2 rounded-pill px-4 py-3 text-sm font-semibold transition-all ${selected
                     ? "border border-chip-border-selected bg-chip-selected text-primary"
                     : "border border-transparent bg-chip text-secondary-foreground"
-                }`}
+                  }`}
               >
                 {selected && <Check className="h-4 w-4" />}
-                {f}
+                {f.label}
               </motion.button>
             );
           })}
@@ -62,12 +70,12 @@ const EnergyFactors = () => {
 
         <div>
           <label className="mb-2 block text-sm font-semibold text-foreground">
-            Add a quick note <span className="font-normal text-muted-foreground">(optional)</span>
+            {t("add_note")} <span className="font-normal text-muted-foreground">({t("optional").toLowerCase()})</span>
           </label>
           <textarea
             value={currentNote}
             onChange={(e) => setCurrentNote(e.target.value.slice(0, 120))}
-            placeholder="Anything you want to remember about today?"
+            placeholder={t("note_placeholder")}
             maxLength={120}
             rows={3}
             className="w-full resize-none rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -81,7 +89,7 @@ const EnergyFactors = () => {
           onClick={handleSave}
           className="w-full rounded-pill bg-primary py-4 text-base font-bold text-primary-foreground transition-all"
         >
-          Save Check-In
+          {t("save_checkin")}
         </button>
       </div>
     </div>

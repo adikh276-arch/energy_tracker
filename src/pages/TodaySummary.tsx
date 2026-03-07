@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEnergy, EnergyLevel } from "@/context/EnergyContext";
 import { Droplets, Footprints, Coffee } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import TopBar from "@/components/TopBar";
 
 const emojiMap: Record<EnergyLevel, string> = {
@@ -12,36 +13,37 @@ const emojiMap: Record<EnergyLevel, string> = {
   high: "⚡",
 };
 
-const labelMap: Record<EnergyLevel, string> = {
-  "very-low": "Very Low",
-  low: "Low",
-  okay: "Okay",
-  good: "Good",
-  high: "High",
-};
-
-const messages: Record<EnergyLevel, string> = {
-  "very-low": "It's okay to rest. Take it slow and be gentle with yourself today.",
-  low: "Be kind to yourself. Small steps count too.",
-  okay: "Your energy is stable today. Be kind to yourself and move at your own pace.",
-  good: "You're doing well! Keep nurturing what feels right.",
-  high: "Amazing energy today! Channel it into something meaningful.",
-};
-
-const suggestions = [
-  { icon: Coffee, text: "Take short breaks" },
-  { icon: Droplets, text: "Stay hydrated" },
-  { icon: Footprints, text: "Do light movement" },
-];
-
 const TodaySummary = () => {
   const { currentLevel } = useEnergy();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const level = currentLevel || "okay";
+
+  const labelMap: Record<EnergyLevel, string> = {
+    "very-low": t("very_low"),
+    low: t("low"),
+    okay: t("okay"),
+    good: t("good"),
+    high: t("high"),
+  };
+
+  const messages: Record<EnergyLevel, string> = {
+    "very-low": t("msg_very_low"),
+    low: t("msg_low"),
+    okay: t("msg_okay"),
+    good: t("msg_good"),
+    high: t("msg_high"),
+  };
+
+  const suggestions = [
+    { icon: Coffee, text: t("breaks") },
+    { icon: Droplets, text: t("hydrated") },
+    { icon: Footprints, text: t("movement") },
+  ];
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
-      <TopBar title="Today's Summary" />
+      <TopBar title={t("summary_title")} />
 
       <main className="flex flex-1 flex-col items-center px-6 pt-8">
         <motion.div
@@ -51,7 +53,7 @@ const TodaySummary = () => {
         >
           <span className="mb-2 block text-5xl">{emojiMap[level]}</span>
           <h2 className="mb-1 text-lg font-bold text-foreground">
-            Today's Energy: {labelMap[level]}
+            {t("today_energy", { label: labelMap[level] })}
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
             {messages[level]}
@@ -79,7 +81,7 @@ const TodaySummary = () => {
           onClick={() => navigate("/weekly")}
           className="w-full rounded-pill bg-primary py-4 text-base font-bold text-primary-foreground transition-all"
         >
-          View Weekly Energy
+          {t("view_weekly")}
         </button>
       </div>
     </div>

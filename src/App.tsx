@@ -37,7 +37,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/energy_tracker">
         <EnergyProvider>
           <div className="mx-auto min-h-[100dvh] max-w-md">
             <AnimatedRoutes />
