@@ -14,10 +14,13 @@ const emojiMap: Record<EnergyLevel, string> = {
 };
 
 const TodaySummary = () => {
-  const { currentLevel } = useEnergy();
+  const { currentLevel, entries } = useEnergy();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const level = currentLevel || "okay";
+  
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayEntry = entries.find(e => e.date === todayStr);
+  const level = currentLevel || todayEntry?.level || "okay";
 
   const labelMap: Record<EnergyLevel, string> = {
     "very-low": t("very_low"),
